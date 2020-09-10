@@ -28,7 +28,7 @@ async def classic_fetch(city, unit, tem):
 
 async def mul_cities(cities, tem):
     unit = 'metric'
-    tasks = [classic_fetch(city, unit, tem) for city in cities]
+    tasks = [asyncio.create_task(classic_fetch(city, unit, tem)) for city in cities]
     datenow = f"{datetime.now().strftime('%A %B %-d, %Y %I:%M:%S %p')} \t"
     print('-' * len(datenow))
     return [await task for task in tasks]
