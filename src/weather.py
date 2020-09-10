@@ -1,7 +1,7 @@
 import click
 import asyncio
 import json
-from Fetcher import Fetcher as fetcher
+from src.Fetcher import Fetcher as fetcher
 from datetime import datetime
 
 async def fetch(city, unit, temp):
