@@ -22,14 +22,23 @@ def process_dt(dt):
 @click.argument('city')
 def forecast(days, city):
     loop = asyncio.get_event_loop()
-    data = loop.run_until_complete(fetch_data(city))
-    datenow = datetime.now().strftime('%A %B %-d, %Y %I:%M:%S %p')
-    print(datenow)
-    print('-' * 50)
-    data = list(d for d in data['list'] if process_dt(d['dt']))
-    for d in data:
-        main = " ".join(list(d['main'] + ', ' +d['description'] for d in d['weather']))
-        print(f'{datetime.fromtimestamp(d["dt"]).strftime("%I:%M %p")} | {d["main"]["temp"]}° Celcius | {main}')
+    if days:
+        print('processing...')
+        data = loop.run_until_complete(fetch_data(city))
+        filename = f'{str(datetime.now().timestamp()).split(".")[0]}_{city}.json'
+        with open(filename, 'w') as fs:
+            fs.write(json.dumps(data, indent=2))
+            print('done.')
+        print('saved into ' + filename)
+    else:
+        data = loop.run_until_complete(fetch_data(city))
+        datenow = datetime.now().strftime('%A %B %-d, %Y %I:%M:%S %p')
+        print(datenow)
+        print('-' * 50)
+        data = list(d for d in data['list'] if process_dt(d['dt']))
+        for d in data:
+            main = " ".join(list(d['main'] + ', ' +d['description'] for d in d['weather']))
+            print(f'{datetime.fromtimestamp(d["dt"]).strftime("%I:%M %p")} | {d["main"]["temp"]}° Celcius | {main}')
 
 if __name__ == '__main__':
     forecast()
