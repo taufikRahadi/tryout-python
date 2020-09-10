@@ -1,6 +1,6 @@
 import click
 import asyncio
-from Fetcher import Fetcher as fetcher
+from src.Fetcher import Fetcher as fetcher
 import json
 from datetime import datetime
 # from functools import wraps
@@ -17,7 +17,11 @@ async def fetch_data(city):
 def process_dt(dt):
     return datetime.utcfromtimestamp(dt).strftime('%Y %m %d') == datetime.now().strftime('%Y %m %d')
 
-@click.command(name="forecast")
+@click.group()
+def cli():
+    pass
+
+@cli.command(name="forecast")
 @click.option('--days', is_flag=True)
 @click.argument('city')
 def forecast(days, city):
@@ -41,4 +45,4 @@ def forecast(days, city):
             print(f'{datetime.fromtimestamp(d["dt"]).strftime("%I:%M %p")} | {d["main"]["temp"]}° Celcius | {main}')
 
 if __name__ == '__main__':
-    forecast()
+    cli()

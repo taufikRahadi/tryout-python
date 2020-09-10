@@ -37,7 +37,11 @@ async def temp_true(city, unit, temp):
     task = asyncio.create_task(classic_fetch(city, unit, temp))
     await task
 
-@click.command(name="weather")
+@click.group()
+def cli():
+    pass
+
+@cli.command(name="weather")
 @click.argument('city', nargs=-1)
 @click.option('--cities', default=False, is_flag=True)
 @click.option('--temp', default=False, is_flag=True)
@@ -66,5 +70,5 @@ def weather(cities, city, temp, celcius, fahrenheit):
         loop.run_until_complete(mul_cities(city, tem))
 
 if __name__ == '__main__':
-    weather()
+    cli()
     
